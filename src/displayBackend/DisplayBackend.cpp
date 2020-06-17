@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <cassert>
 
 #include <xen/be/XenStore.hpp>
 
@@ -155,6 +156,8 @@ DisplayBackend::DisplayBackend(DisplayPtr display,
 	BackendBase("DisplBackend", deviceName),
 	mDisplay(display)
 {
+	assert(mDisplay);
+
 	mDisplay->start();
 }
 
