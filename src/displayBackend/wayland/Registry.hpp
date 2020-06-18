@@ -8,6 +8,7 @@
 #ifndef SRC_WAYLAND_REGISTRY_HPP_
 #define SRC_WAYLAND_REGISTRY_HPP_
 
+#include <cassert>
 #include <wayland-client.h>
 
 namespace Wayland {
@@ -48,10 +49,23 @@ protected:
 	/**
 	 * Binds registry
 	 */
-	void* bind(const wl_interface *interface)
+	template<typename T>
+	T bind(const wl_interface *interface)
 	{
-		return wl_registry_bind(mWlRegistry, mId, interface, mVersion);
+		checkPointer<T>();
+		T ret = nullptr;
+		if(interface){
+			ret = static_cast<T>(wl_registry_bind(mWlRegistry, mId, interface, mVersion));
+		}
+		return ret;
 	}
+
+   	/**
+	 * The template to identify if 'T' is pointer or not. If not a pointer - compilation error.
+	 */
+	template <typename T> struct allow_bind {static_assert(std::is_integral<T>::value, "Can only be pointer type");};
+	template <typename T> struct allow_bind <T*> {};
+	template <typename T> inline void checkPointer(){BindTest::allow_bind<T> ab;(void)ab;}
 
 private:
 

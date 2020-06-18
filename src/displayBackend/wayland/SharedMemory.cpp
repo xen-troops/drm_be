@@ -105,7 +105,7 @@ void SharedMemory::formatHandler(uint32_t format)
 
 void SharedMemory::init()
 {
-	mWlSharedMemory = static_cast<wl_shm*>(bind(&wl_shm_interface));
+	mWlSharedMemory = bind<wl_shm*>(&wl_shm_interface);
 
 	if (!mWlSharedMemory)
 	{

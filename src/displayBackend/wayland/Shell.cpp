@@ -53,7 +53,7 @@ ShellSurfacePtr Shell::createShellSurface(SurfacePtr surface)
 
 void Shell::init()
 {
-	mWlShell = static_cast<wl_shell*>(bind(&wl_shell_interface));
+	mWlShell = bind<wl_shell*>(&wl_shell_interface);
 
 	if (!mWlShell)
 	{
