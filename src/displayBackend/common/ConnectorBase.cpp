@@ -218,7 +218,7 @@ void ConnectorBase::edidPutDetailedTiming(edid* edidBlock, int index,
 	pixelData->misc = DRM_EDID_PT_SEPARATE_SYNC;
 }
 
-void ConnectorBase::edidPutTimings(edid* edidBlock)
+void ConnectorBase::edidPutTimings(edid* edidBlock, uint32_t xres, uint32_t yres)
 {
 	/*
 	 * Established timing bitmap. Supported bitmap for (formerly)
@@ -243,10 +243,10 @@ void ConnectorBase::edidPutTimings(edid* edidBlock)
 	 * We only provide a single timing here which corresponds to
 	 * XenStore configuration of this connector.
 	 */
-	edidPutDetailedTiming(edidBlock, 0, mCfgWidth, mCfgHeight, EDID_DPI);
+	edidPutDetailedTiming(edidBlock, 0, xres, yres, EDID_DPI);
 }
 
-size_t ConnectorBase::getEDID(grant_ref_t startDirectory, uint32_t size)
+size_t ConnectorBase::getEDID(grant_ref_t startDirectory, uint32_t size) const
 {
 	GrantRefs refs;
 
@@ -265,7 +265,7 @@ size_t ConnectorBase::getEDID(grant_ref_t startDirectory, uint32_t size)
 
 	edidPutEssentials(edidBlock);
 	edidPutColorSpace(edidBlock);
-	edidPutTimings(edidBlock);
+	edidPutTimings(edidBlock, mCfgWidth, mCfgHeight);
 	edidPutBlockCheckSum(static_cast<uint8_t*>(edidBuffer.get()));
 
 	return XENDISPL_EDID_BLOCK_SIZE;
