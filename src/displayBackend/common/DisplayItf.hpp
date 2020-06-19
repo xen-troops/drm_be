@@ -187,7 +187,7 @@ public:
 	 * @param  size           buffer size
 	 * @return size of the EDID placed in the buffer
 	 */
-	virtual size_t getEDID(grant_ref_t startDirectory, uint32_t size) = 0;
+	virtual size_t getEDID(grant_ref_t startDirectory, uint32_t size) const = 0;
 };
 
 typedef std::shared_ptr<Connector> ConnectorPtr;
