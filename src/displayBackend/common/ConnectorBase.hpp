@@ -57,42 +57,42 @@ protected:
 	 * @param startDirectory grant table reference to the buffer start directory
 	 * @param size           buffer size
 	 */
-	size_t getEDID(grant_ref_t startDirectory, uint32_t size);
+	size_t getEDID(grant_ref_t startDirectory, uint32_t size) const;
 
 private:
 
 	/* Refresh rate advertized via EDID detailed timings. */
-	const int EDID_REFRESH_RATE_HZ = 60;
+	static const int EDID_REFRESH_RATE_HZ = 60;
 
 	/* Dots per inch advertized via EDID detailed timings. */
-	const int EDID_DPI = 100;
+	static const int EDID_DPI = 100;
 
 	/* EDID advertized manufacturing year. */
-	const int EDID_MANUFACTURING_YEAR = 2020;
+	static const int EDID_MANUFACTURING_YEAR = 2020;
 
 	/**
 	 * Calculate and append checksum of the EDID block
 	 * @param edidBlock buffer with EDID block
 	 */
-	void edidPutBlockCheckSum(uint8_t* edidBlock);
+	static void edidPutBlockCheckSum(uint8_t* edidBlock);
 
 	/**
 	 * Put essential data into the EDID
 	 * @param edidBlock buffer with EDID block
 	 */
-	void edidPutEssentials(edid* edidBlock);
+	static void edidPutEssentials(edid* edidBlock);
 
 	/**
 	 * Put color space data into the EDID
 	 * @param edidBlock buffer with EDID block
 	 */
-	void edidPutColorSpace(edid* edidBlock);
+	static void edidPutColorSpace(edid* edidBlock);
 
 	/**
 	 * * Put supported timings into the EDID
 	 * * @param edidBlock buffer with EDID block
 	 * */
-	void edidPutTimings(edid* edidBlock);
+	static void edidPutTimings(edid* edidBlock, uint32_t xres, uint32_t yres);
 
 	/**
 	 * Put detailed timings into the EDID
@@ -102,7 +102,7 @@ private:
 	 * @param yres      desired Y resolution
 	 * @param dpi       desired DPI
 	 */
-	void edidPutDetailedTiming(edid* edidBlock, int index,
+	static void edidPutDetailedTiming(edid* edidBlock, int index,
 							   uint32_t xres, uint32_t yres,
 							   uint32_t dpi);
 
