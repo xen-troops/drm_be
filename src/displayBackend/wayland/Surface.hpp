@@ -61,7 +61,7 @@ private:
 
 	const uint32_t cFrameTimeoutMs = 50;
 
-	Surface(wl_compositor* compositor);
+	explicit Surface(wl_compositor* compositor);
 
 	wl_surface* mWlSurface;
 	wl_callback *mWlFrameCallback;
