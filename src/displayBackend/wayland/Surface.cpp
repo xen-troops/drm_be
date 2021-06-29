@@ -5,6 +5,7 @@
  *      Author: al1
  */
 
+#include <cassert>
 #include "Surface.hpp"
 
 #include "Exception.hpp"
@@ -31,6 +32,7 @@ Surface::Surface(wl_compositor* compositor) :
 	mWaitForFrame(false),
 	mLog("Surface")
 {
+	assert(compositor != nullptr);
 	try
 	{
 		init(compositor);
