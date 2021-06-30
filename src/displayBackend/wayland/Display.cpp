@@ -428,24 +428,22 @@ void Display::registryHandler(wl_registry *registry, uint32_t id,
 	{
 		mCompositor.reset(new Compositor(mWlDisplay, registry, id, version));
 	}
-
-	if (interface == "wl_shell")
+	else if (interface == "wl_shell")
 	{
 		mShell.reset(new Shell(registry, id, version));
 	}
-
-	if (interface == "wl_shm")
+	else if (interface == "wl_shm")
 	{
 		mSharedMemory.reset(new SharedMemory(registry, id, version));
 	}
 #ifdef WITH_IVI_EXTENSION
-	if (interface == "ivi_application")
+	else if (interface == "ivi_application")
 	{
 		mIviApplication.reset(new IviApplication(registry, id, version));
 	}
 #endif
 #ifdef WITH_INPUT
-	if (interface == "wl_seat")
+	else if (interface == "wl_seat")
 	{
 		mSeat.reset(new Seat(registry, id, Seat::cVersion));
 	}
@@ -457,11 +455,11 @@ void Display::registryHandler(wl_registry *registry, uint32_t id,
 		{
 			mWaylandDrm.reset(new WaylandDrm(registry, id, version));
 		}
-		if (interface == "wl_kms")
+		else if (interface == "wl_kms")
 		{
 			mWaylandKms.reset(new WaylandKms(registry, id, version));
 		}
-		if (interface == "zwp_linux_dmabuf_v1")
+		else if (interface == "zwp_linux_dmabuf_v1")
 		{
 			mWaylandLinuxDmabuf.reset(new WaylandLinuxDmabuf(registry, id, version));
 		}
