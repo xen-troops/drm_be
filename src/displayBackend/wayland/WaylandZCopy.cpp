@@ -78,7 +78,14 @@ void WaylandZCopy::onDevice(const string& name)
 
 	LOG(mLog, DEBUG) << "onDevice name: " << name;
 
-	mDrmDevice.reset(new Drm::DisplayWayland(name));
+	try
+	{
+		mDrmDevice.reset(new Drm::DisplayWayland(name));
+	}
+	catch(const std::exception& err)
+	{
+		LOG(mLog, ERROR) << err.what();
+	}
 
 	authenticate();
 }
