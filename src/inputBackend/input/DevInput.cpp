@@ -80,6 +80,11 @@ void DevInputBase::stop()
 
 void DevInputBase::init()
 {
+	auto ioctl_call = [this](int value)->int
+	{
+		return ioctl(mFd, EVIOCGRAB, &value);
+	};
+
 	mFd = open(mName.c_str(), O_RDONLY);
 
 	if (mFd < 0)
@@ -87,12 +92,12 @@ void DevInputBase::init()
 		throw XenBackend::Exception("Can't open device: " + mName, errno);
 	}
 
-	if (ioctl(mFd, EVIOCGRAB, reinterpret_cast<void*>(1)))
+	if (ioctl_call(1))
 	{
 		throw XenBackend::Exception("Grabbed by another process", EBUSY);
 	}
 
-	ioctl(mFd, EVIOCGRAB, reinterpret_cast<void*>(0));
+	ioctl_call(0);
 
 	mPollFd.reset(new PollFd(mFd, POLLIN));
 
