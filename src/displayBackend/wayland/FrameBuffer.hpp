@@ -51,12 +51,9 @@ public:
 	virtual ~WlBuffer();
 
 	/**
-	 * Gets handle
+	 * Gets WLBuffer
 	 */
-	uintptr_t getHandle() const override
-	{
-		return reinterpret_cast<uintptr_t>(mWlBuffer);
-	}
+	wl_buffer* getWLBuffer()const{ return mWlBuffer;}
 
 	/**
 	 * Gets width

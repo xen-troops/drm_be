@@ -20,7 +20,7 @@
  */
 
 #include "Connector.hpp"
-
+#include <cassert>
 #include "Display.hpp"
 
 using std::chrono::milliseconds;
@@ -82,6 +82,8 @@ Connector::~Connector()
 void Connector::init(uint32_t width, uint32_t height,
 					 FrameBufferPtr frameBuffer)
 {
+	assert(frameBuffer);
+	
 	lock_guard<mutex> lock(sMutex);
 
 	if (mConnector->connection != DRM_MODE_CONNECTED)
@@ -94,7 +96,11 @@ void Connector::init(uint32_t width, uint32_t height,
 		throw Exception("Already initialized", EINVAL);
 	}
 
-	auto fbId = frameBuffer->getHandle();
+	auto fBuffer= dynamic_cast<Drm::FrameBuffer*>(frameBuffer.get());
+	// type of buffer must be Drm::FrameBuffer
+	assert(fBuffer);
+    
+	auto fbId = fBuffer->getID();
 
 	LOG(mLog, DEBUG) << "Init, con id:" << mConnector->connector_id
 					 << ", w: " << width << ", h: " << height
@@ -147,6 +153,8 @@ void Connector::release()
 
 void Connector::pageFlip(FrameBufferPtr frameBuffer, FlipCallback cbk)
 {
+	assert(frameBuffer);
+
 	if (!isInitialized())
 	{
 		throw Exception("Connector is not initialized", EINVAL);
@@ -155,7 +163,11 @@ void Connector::pageFlip(FrameBufferPtr frameBuffer, FlipCallback cbk)
 	mFlipPending = true;
 	mFlipCallback = cbk;
 
-	auto fbId = frameBuffer->getHandle();
+	auto fBuffer= dynamic_cast<Drm::FrameBuffer*>(frameBuffer.get());
+	// type of buffer must be Drm::FrameBuffer
+	assert(fBuffer);
+    
+	auto fbId = fBuffer->getID();
 
 	auto ret = drmModePageFlip(mFd, mCrtcId, fbId,
 							   DRM_MODE_PAGE_FLIP_EVENT, this);

@@ -105,11 +105,6 @@ public:
 	virtual ~FrameBuffer() {};
 
 	/**
-	 * Gets handle
-	 */
-	virtual uintptr_t getHandle() const = 0;
-
-	/**
 	 * Gets width
 	 */
 	virtual uint32_t getWidth() const = 0;

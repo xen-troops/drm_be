@@ -82,17 +82,18 @@ void Surface::draw(FrameBufferPtr frameBuffer,
 
 	mBuffer = dynamic_cast<WlBuffer*>(frameBuffer.get());
 
-	if (mBuffer)
+	if (mBuffer == nullptr)
 	{
-		mBuffer->setSurface(this);
+		throw Exception("FrameBuffer must have type WlBuffer.", EINVAL);
 	}
 
+	mBuffer->setSurface(this);
+	
 	wl_surface_damage(mWlSurface, 0, 0,
-					  frameBuffer->getWidth(), frameBuffer->getHeight());
+					  mBuffer->getWidth(),
+					  mBuffer->getHeight());
 
-	wl_surface_attach(mWlSurface,
-					  reinterpret_cast<wl_buffer*>(frameBuffer->getHandle()),
-					  0, 0);
+	wl_surface_attach(mWlSurface, mBuffer->getWLBuffer(), 0, 0);
 
 	wl_surface_commit(mWlSurface);
 

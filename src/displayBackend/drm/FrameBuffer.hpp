@@ -50,10 +50,10 @@ public:
 
 	~FrameBuffer();
 
-	/**
-	 * Gets handle
-	 */
-	uintptr_t getHandle() const override { return mId; }
+	/*
+	 * Gets frameID
+	*/
+     uint32_t getID()const {return mId;}
 
 	/**
 	 * Gets width
