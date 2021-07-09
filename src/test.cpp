@@ -88,10 +88,9 @@ int main(int argc, char *argv[])
 		auto db2 = display->createDisplayBuffer(300, 200, 32);
 		auto fb2 = display->createFrameBuffer(db2, 300, 200, 1);
 
-		for(size_t i = 0; i < db1->getSize() / 4; i++)
-		{
-			(reinterpret_cast<uint32_t*>(db1->getBuffer()))[i] = 0xFFAACC;
-		}
+		uint32_t *uiBegin = static_cast<uint32_t*>(db1->getBuffer());
+		uint32_t *uiEnd = uiBegin + db1->getSize() / sizeof(uint32_t);
+		std::for_each(uiBegin, uiEnd, [](uint32_t &v){v = 0xFFAACC;});
 
 		memset(db1->getBuffer(), db1->getSize(), 0x11);
 		memset(db2->getBuffer(), db2->getSize(), 0xAA);
