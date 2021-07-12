@@ -127,7 +127,7 @@ void Seat::readName(const std::string& name)
 
 void Seat::init()
 {
-	mWlSeat = static_cast<wl_seat*>(bind(&wl_seat_interface));
+	mWlSeat = bind<wl_seat*>(&wl_seat_interface);
 
 	if (!mWlSeat)
 	{

@@ -56,7 +56,7 @@ SurfacePtr Compositor::createSurface()
 
 void Compositor::init()
 {
-	mWlCompositor = static_cast<wl_compositor*>(bind(&wl_compositor_interface));
+	mWlCompositor = bind<wl_compositor*>(&wl_compositor_interface);
 
 	if (!mWlCompositor)
 	{

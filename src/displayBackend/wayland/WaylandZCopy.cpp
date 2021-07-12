@@ -191,7 +191,7 @@ void WaylandDrm::authenticate()
 
 void WaylandDrm::init()
 {
-	mWlDrm = static_cast<wl_drm*>(bind(&wl_drm_interface));
+	mWlDrm = bind<wl_drm*>(&wl_drm_interface);
 
 	if (!mWlDrm)
 	{
@@ -290,7 +290,7 @@ void WaylandKms::authenticate()
 
 void WaylandKms::init()
 {
-	mWlKms = static_cast<wl_kms*>(bind(&wl_kms_interface));
+	mWlKms = bind<wl_kms*>(&wl_kms_interface);
 
 	if (!mWlKms)
 	{
@@ -412,8 +412,7 @@ void WaylandLinuxDmabuf::init(uint32_t version)
 		throw Exception("Unsupported protocol version", errno);
 	}
 
-	mWlLinuxDmabuf = static_cast<zwp_linux_dmabuf_v1*>(
-		bind(&zwp_linux_dmabuf_v1_interface));
+	mWlLinuxDmabuf = bind<zwp_linux_dmabuf_v1*>(&zwp_linux_dmabuf_v1_interface);
 
 	if (!mWlLinuxDmabuf)
 	{

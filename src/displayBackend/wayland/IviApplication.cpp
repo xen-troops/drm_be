@@ -56,8 +56,7 @@ IviSurfacePtr IviApplication::createIviSurface(SurfacePtr surface,
 
 void IviApplication::init()
 {
-	mWlIviApplication = static_cast<ivi_application*>(
-			bind(&ivi_application_interface));
+	mWlIviApplication = bind<ivi_application*>(&ivi_application_interface);
 
 	if (!mWlIviApplication)
 	{
