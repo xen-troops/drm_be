@@ -408,8 +408,14 @@ void Display::sWaylandLog(const char* fmt, va_list arg)
 void Display::sRegistryHandler(void *data, wl_registry *registry, uint32_t id,
 							   const char *interface, uint32_t version)
 {
-	static_cast<Display*>(data)->registryHandler(registry, id, interface,
-												 version);
+	try
+	{
+		static_cast<Display*>(data)->registryHandler(registry, id, interface, version);
+	}
+	catch(const std::exception& err)
+	{
+		LOG("Wayland", ERROR) << err.what();
+	}
 }
 
 void Display::sRegistryRemover(void *data, struct wl_registry *registry,
@@ -428,24 +434,22 @@ void Display::registryHandler(wl_registry *registry, uint32_t id,
 	{
 		mCompositor.reset(new Compositor(mWlDisplay, registry, id, version));
 	}
-
-	if (interface == "wl_shell")
+	else if (interface == "wl_shell")
 	{
 		mShell.reset(new Shell(registry, id, version));
 	}
-
-	if (interface == "wl_shm")
+	else if (interface == "wl_shm")
 	{
 		mSharedMemory.reset(new SharedMemory(registry, id, version));
 	}
 #ifdef WITH_IVI_EXTENSION
-	if (interface == "ivi_application")
+	else if (interface == "ivi_application")
 	{
 		mIviApplication.reset(new IviApplication(registry, id, version));
 	}
 #endif
 #ifdef WITH_INPUT
-	if (interface == "wl_seat")
+	else if (interface == "wl_seat")
 	{
 		mSeat.reset(new Seat(registry, id, Seat::cVersion));
 	}
@@ -457,11 +461,11 @@ void Display::registryHandler(wl_registry *registry, uint32_t id,
 		{
 			mWaylandDrm.reset(new WaylandDrm(registry, id, version));
 		}
-		if (interface == "wl_kms")
+		else if (interface == "wl_kms")
 		{
 			mWaylandKms.reset(new WaylandKms(registry, id, version));
 		}
-		if (interface == "zwp_linux_dmabuf_v1")
+		else if (interface == "zwp_linux_dmabuf_v1")
 		{
 			mWaylandLinuxDmabuf.reset(new WaylandLinuxDmabuf(registry, id, version));
 		}
@@ -498,7 +502,10 @@ void Display::init()
 		throw Exception("Can't get registry", errno);
 	}
 
-	wl_registry_add_listener(mWlRegistry, &mWlRegistryListener, this);
+	if(wl_registry_add_listener(mWlRegistry, &mWlRegistryListener, this) == -1)
+	{
+		throw Exception("Can not add the listener.", errno);
+	};
 
 	wl_display_dispatch(mWlDisplay);
 	wl_display_roundtrip(mWlDisplay);
